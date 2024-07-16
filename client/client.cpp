@@ -25,9 +25,9 @@ void TCPClient::startClient() {
         return;
     }
 
-    int socket_bind = bind(m_socket, (struct sockaddr*)&server_addr, sizeof(server_addr));
-    if (socket_bind < 0) {
-        std::cerr << "Error binding socket" << std::endl;
+    int socket_connect = connect(m_socket, (struct sockaddr*)&server_addr, sizeof(server_addr));
+    if (socket_connect < 0) {
+        std::cerr << "Error connecting to socket" << std::endl;
         return;
     }
 
@@ -48,7 +48,7 @@ void TCPClient::sendMessage(std::string message) {
         return;
     }
 
-    int send_status = send(m_socket, message.c_str(), message.size(), 0);
+    int send_status = write(m_socket, message.c_str(), message.size());
     if (send_status < 0) {
         std::cerr << "Error sending message" << std::endl;
         return;
@@ -56,6 +56,34 @@ void TCPClient::sendMessage(std::string message) {
 
     std::cout << "Message sent successfully!" << std::endl;
 
+}
+
+void TCPClient::receiveMessage() {
+    if (!m_connected) {
+        std::cerr << "Client not connected" << std::endl;
+        return;
+    }
+
+    char buffer[1024] = {0};
+    int read_status = read(m_socket, buffer, 1024);
+    if (read_status < 0) {
+        std::cerr << "Error reading message" << std::endl;
+        return;
+    }
+
+    std::cout << "Message received: " << buffer << std::endl;
+
+}
+
+void TCPClient::connectToServer(std::string ip, int port) {
+    int connection_status = connect(m_socket, (struct sockaddr*)&server_addr, sizeof(server_addr));
+    if (connection_status < 0) {
+        std::cerr << "Error connecting to server" << std::endl;
+        return;
+    }
+
+    m_connected = true;
+    std::cout << "Connected to server successfully!" << std::endl;
 }
 
 bool TCPClient::isConnected() {

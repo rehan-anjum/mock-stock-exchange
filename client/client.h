@@ -16,7 +16,9 @@ class TCPClient {
         TCPClient(std::string ip, int port);
         void startClient();
         void closeClient();
+        void connectToServer(std::string ip, int port);
         void sendMessage(std::string message);
+        void receiveMessage();
         bool isConnected();
         ~TCPClient(); 
 

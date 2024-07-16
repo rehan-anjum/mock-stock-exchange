@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.wlp4": "cpp",
+        "cstring": "cpp"
+    }
+}

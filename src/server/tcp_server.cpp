@@ -7,4 +7,5 @@ int main() {
 
     server.start_server();
     server.close_server();
+    return 0;
 }

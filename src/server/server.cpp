@@ -2,6 +2,9 @@
 #include <iostream> 
 #include <string>
 #include <sstream>
+#include <thread>
+#include <vector>
+#include <functional>
 
 #include <netinet/in.h> 
 #include <sys/socket.h> 
@@ -34,7 +37,6 @@ Server::~Server() {
 }
 
 void Server::start_server() {
-
     // Create a socket
     my_socket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -66,26 +68,38 @@ void Server::start_listening() {
     log(iss.str());
     log("Server ready to receive");
 
-    int bytes_received;
+    std::vector<std::thread> threads;
+    
+    while (true) {
+        new_socket = accept(my_socket, (struct sockaddr *)&my_socketAddress, (socklen_t *)&socket_address_length);
 
-    new_socket = accept(my_socket, (struct sockaddr *)&my_socketAddress, (socklen_t *)&socket_address_length);
-
-    while (true) {   
-
-        // Accept a connection
         if (new_socket < 0) {
-            std::ostringstream iss;
-            iss << "Could not accept connection on port " << my_port << 
-                " and IP address " << ip_address << std::endl;
+            log("Could not accept connection");
+            continue;
         }
 
-        log("Connection accepted. Waiting for message from client");
+        log("Connection accepted. Creating new thread to handle client");
 
+        // Create a new thread to handle the connection
+        threads.emplace_back([this](int socket) { accept_connection(socket); }, new_socket);
+    }
+
+    for (auto& th : threads) {
+        if (th.joinable()) {
+            th.join();
+        }
+    }
+}
+
+
+void Server::accept_connection(int client_socket) {
+    int bytes_received;
+    const int BUFFER_SIZE = 30720;
+
+    while (true) {
         // Receive a message from the client
-        const int BUFFER_SIZE = 30720;
-
         char buffer[BUFFER_SIZE] = {0};
-        bytes_received = read(new_socket, buffer, BUFFER_SIZE);
+        bytes_received = read(client_socket, buffer, BUFFER_SIZE);
 
         if (bytes_received < 0) {
             error("Could not receive message from client");
@@ -109,20 +123,13 @@ void Server::start_listening() {
         } 
 
         // Send a message back to the client
-        int send_status = write(new_socket, client_message.c_str(), client_message.size());
+        int send_status = write(client_socket, client_message.c_str(), client_message.size());
         if (send_status < 0) {
             error("Could not send back message to client");
         }
-        // close (new_socket);
     }
 
-    close(new_socket);
-    return;
-
-}
-
-void Server::accept_connection(int new_socket) {
-
+    close(client_socket);
 }
 
 void Server::close_server() {

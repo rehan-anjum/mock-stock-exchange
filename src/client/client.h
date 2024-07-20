@@ -4,7 +4,7 @@
 #include <sys/socket.h> 
 #include <unistd.h> 
   
-class TCPClient { 
+class Client { 
     private:
         std::string m_ip;
         int m_port;
@@ -13,13 +13,13 @@ class TCPClient {
         bool m_connected;
 
     public:
-        TCPClient(std::string ip, int port);
-        void startClient();
-        void closeClient();
-        void connectToServer(std::string ip, int port);
-        void sendMessage(std::string message);
-        void receiveMessage();
-        bool isConnected();
-        ~TCPClient(); 
+        Client(std::string ip, int port);
+        void start_client();
+        void close_client();
+        void connect_to_server(std::string ip, int port);
+        void send_message(std::string message);
+        void receive_message();
+        bool is_connected();
+        ~Client(); 
 
 };

@@ -8,7 +8,7 @@
 #include "client.h"
 
 
-TCPClient::TCPClient(std::string ip, int port) : m_ip(ip), m_port(port) {
+Client::Client(std::string ip, int port) : m_ip(ip), m_port(port) {
 
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(m_port);
@@ -18,7 +18,7 @@ TCPClient::TCPClient(std::string ip, int port) : m_ip(ip), m_port(port) {
 
 }
 
-void TCPClient::startClient() {
+void Client::start_client() {
     m_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (m_socket < 0) {
         std::cerr << "Error creating socket" << std::endl;
@@ -36,13 +36,13 @@ void TCPClient::startClient() {
 
 }
 
-void TCPClient::closeClient() {
+void Client::close_client() {
     close(m_socket);
     std::cout << "Socket closed successfully!" << std::endl;
     exit(0);
 }
 
-void TCPClient::sendMessage(std::string message) {
+void Client::send_message(std::string message) {
     if (!m_connected) {
         std::cerr << "Client not connected" << std::endl;
         return;
@@ -58,7 +58,7 @@ void TCPClient::sendMessage(std::string message) {
 
 }
 
-void TCPClient::receiveMessage() {
+void Client::receive_message() {
     if (!m_connected) {
         std::cerr << "Client not connected" << std::endl;
         return;
@@ -75,7 +75,7 @@ void TCPClient::receiveMessage() {
 
 }
 
-void TCPClient::connectToServer(std::string ip, int port) {
+void Client::connect_to_server(std::string ip, int port) {
     int connection_status = connect(m_socket, (struct sockaddr*)&server_addr, sizeof(server_addr));
     if (connection_status < 0) {
         std::cerr << "Error connecting to server" << std::endl;
@@ -86,12 +86,12 @@ void TCPClient::connectToServer(std::string ip, int port) {
     std::cout << "Connected to server successfully!" << std::endl;
 }
 
-bool TCPClient::isConnected() {
+bool Client::is_connected() {
     return m_connected;
 }
 
-TCPClient::~TCPClient() {
-    closeClient();
+Client::~Client() {
+    close_client();
 }
 
 

@@ -2,10 +2,9 @@
 #include "client.h"
 
 int main() {
-    TCPClient client("0.0.0.0", 8080);
+    Client client("0.0.0.0", 8080);
 
-    client.startClient();
-    // client.connectToServer("0.0.0.0", 8080);
+    client.start_client();
 
     while (true) {
         std::string message;
@@ -15,11 +14,11 @@ int main() {
             break;
         }
 
-        client.sendMessage(message);
-        client.receiveMessage();
+        client.send_message(message);
+        client.receive_message();
     }
     
-    client.closeClient();
+    client.close_client();
 
     return 0;
 }

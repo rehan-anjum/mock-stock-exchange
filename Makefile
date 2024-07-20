@@ -1,13 +1,34 @@
-build: build-server build-client
+CXX = g++ -std=c++17
+CXXFLAGS = -Wall -g -MMD -I include 
+SOURCES = $(wildcard src/exchange/*.cpp) $(wildcard src/server/*.cpp)
+CLIENT_SOURCES = $(wildcard src/client/*.cpp)
+OBJECTS = $(patsubst src/%.cpp, build/%.o, $(SOURCES))
+CLIENT_OBJECTS = $(patsubst src/%.cpp, build/%.o, $(CLIENT_SOURCES))
+DEPENDS = $(OBJECTS:.o=.d) $(CLIENT_OBJECTS:.o=.d)
+EXEC = server
+CLIENT_EXEC = client
 
-build-server:
-	g++ -std=c++17 src/server/tcp_server.cpp src/server/server.cpp -o src/server/server
+all: server client
 
-build-client:
-	g++ -std=c++17 src/client/tcp_client.cpp src/client/client.cpp -o src/client/client
+server: $(EXEC)
 
-server:
-	./src/server/server
+client: $(CLIENT_EXEC)
 
-client:
-	./src/client/client
+$(EXEC): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC)
+
+$(CLIENT_EXEC): $(CLIENT_OBJECTS)
+	$(CXX) $(CXXFLAGS) $(CLIENT_OBJECTS) -o $(CLIENT_EXEC)
+
+build/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+build:
+	mkdir -p build
+
+-include $(DEPENDS)
+
+.PHONY: all server client clean
+clean:
+	rm -rf build $(EXEC) $(CLIENT_EXEC)

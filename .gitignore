@@ -1,3 +1,5 @@
 .DS_Store
-src/client/client
-src/server/server
+*o
+*d
+client
+server

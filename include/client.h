@@ -1,3 +1,6 @@
+#ifndef CLIENT_H
+#define CLIENT_H
+
 #include <cstring> 
 #include <iostream> 
 #include <netinet/in.h> 
@@ -23,3 +26,5 @@ class Client {
         ~Client(); 
 
 };
+
+#endif

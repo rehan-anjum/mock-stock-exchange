@@ -11,19 +11,9 @@ This project is a mock stock exchange. We use TCP connections to host a multi-th
 
 ## Usage
 
-Run the Server:
-
-```bash 
-$ cd src/server
-$ g++ -std=c++17 tcp_server.cpp server.cpp -o server
-$ ./server
+Simply use the Makefile provided:
+```bash
+$ make
 ```
 
-Run multiple instances of the client:
-
-```bash 
-$ cd src/client
-$ g++ -std=c++17 tcp_client.cpp client.cpp -o client
-$ ./client
-```
-
+First, start the server with `./server`, then host multiple instances of the client via `./client` as required.

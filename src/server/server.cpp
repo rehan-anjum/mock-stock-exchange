@@ -12,10 +12,6 @@
 
 #include "server.h"
 
-const std::string FETCH = "Fetch successful!";
-const std::string BUY = "Buy successful!";
-const std::string SELL = "Sell successful!";
-
 void log(const std::string &message) {
     std::cout << message << std::endl;
 }
@@ -91,6 +87,9 @@ void Server::start_listening() {
     }
 }
 
+void Server::attach_handler(MessageHandler& handler) {
+    this->handler = &handler;
+}
 
 void Server::accept_connection(int client_socket) {
     int bytes_received;
@@ -112,18 +111,16 @@ void Server::accept_connection(int client_socket) {
         log("Message: " + std::string(buffer)); // Print the message
 
         std::string client_message = "";
-        if (std::string(buffer) == "fetch") {
-            client_message = FETCH;
-        } else if (std::string(buffer) == "buy") {
-            client_message = BUY;
-        } else if (std::string(buffer) == "sell") {
-            client_message = SELL;
-        } else {
-            client_message = "Invalid command";
-        } 
+
+        try {
+            client_message = handler->addMessage(std::string(buffer));
+        } catch (std::invalid_argument& e) {
+            client_message = "Invalid message: " + std::string(e.what());
+        }
 
         // Send a message back to the client
         int send_status = write(client_socket, client_message.c_str(), client_message.size());
+
         if (send_status < 0) {
             error("Could not send back message to client");
         }

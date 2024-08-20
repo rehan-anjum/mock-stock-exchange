@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "messages.h"
+#include "messages.hpp"
 
 class MessageHandler {
 

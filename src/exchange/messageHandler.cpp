@@ -3,8 +3,8 @@
 #include <sstream>
 #include <vector>
 #include <memory>
-#include "messages.h"
-#include "messageHandler.h"
+#include "messages.hpp"
+#include "messageHandler.hpp"
 
 MessageHandler::MessageHandler(void* exchange) {
     this->exchange = exchange;

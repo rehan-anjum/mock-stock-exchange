@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include "client.h"
+#include "client.hpp"
 
 
 Client::Client(std::string ip, int port) : m_ip(ip), m_port(port) {

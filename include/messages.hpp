@@ -2,12 +2,7 @@
 #define MESSAGES_H
 
 #include <string>
-
-enum class MessageType {
-    order,
-    cancel,
-    fetch
-};
+#include "enums.hpp"
 
 struct Message {
     bool fromClient = false;

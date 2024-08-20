@@ -1,5 +1,5 @@
 #include <iostream>
-#include "exchange.h"
+#include "exchange.hpp"
 
 Exchange::Exchange() {}
 

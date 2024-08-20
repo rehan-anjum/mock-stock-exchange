@@ -1,7 +1,7 @@
 #include <string>
-#include "server.h"
-#include "exchange.h"
-#include "messageHandler.h"
+#include "server.hpp"
+#include "exchange.hpp"
+#include "messageHandler.hpp"
 
 int main() {
 

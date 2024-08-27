@@ -18,7 +18,7 @@ void MessageHandler::processMessage(std::string data) {
 
     try {
         if (s == "order") {
-            message->type = MessageType::order;
+            message->type = MessageType::Order;
 
             double size, price = 0;
             bool isBuy = false;
@@ -34,12 +34,12 @@ void MessageHandler::processMessage(std::string data) {
             }
             // exchange->addOrder(size, price, isBuy);
         } else if (s == "cancel") {
-            message->type = MessageType::cancel;
+            message->type = MessageType::Cancel;
             int id;
             stream >> id;
             // exchange->cancelOrder(id);
         } else if (s == "fetch") {
-            message->type = MessageType::fetch;
+            message->type = MessageType::Fetch;
             // exchange->fetchOrderbook();
         } else {
             throw std::invalid_argument("Invalid message type"); 
@@ -56,9 +56,9 @@ std::string MessageHandler::addMessage(std::string data) {
 
     try {
         processMessage(data);
-        if (messages.back()->type == MessageType::order) {
+        if (messages.back()->type == MessageType::Order) {
             return "Order received";
-        } else if (messages.back()->type == MessageType::cancel) {
+        } else if (messages.back()->type == MessageType::Cancel) {
             return "Order cancelled";
         } else {
             return "Orderbook fetched";

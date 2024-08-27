@@ -2,14 +2,14 @@
 #define ENUMS_HPP
 
 enum class MessageType {
-    order,
-    cancel,
-    fetch
+    Order,
+    Cancel,
+    Fetch
 };
 
 enum class OrderSide {
-    buy,
-    sell
+    Buy,
+    Sell
 };
 
 #endif

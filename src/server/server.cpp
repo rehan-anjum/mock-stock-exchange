@@ -75,6 +75,7 @@ void Server::start_listening() {
         }
 
         log("Connection accepted. Creating new thread to handle client");
+        log("User joined as socket: " + std::to_string(new_socket));
 
         // Create a new thread to handle the connection
         threads.emplace_back([this](int socket) { accept_connection(socket); }, new_socket);
